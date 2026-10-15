@@ -28,7 +28,7 @@ export const seedSampleData = async (
     payload: SeedRequest,
     apiBaseUrl: string,
 ): Promise<SeedResponse> => {
-    const response = await fetch(`${apiBaseUrl}/seed-sample-data`, {
+    const response = await fetch(`${apiBaseUrl}/api/seed-sample-data`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

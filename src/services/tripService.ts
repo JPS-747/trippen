@@ -91,7 +91,7 @@ export const getTrips = async (
     }
 
     const query = params.toString()
-    const response = await fetch(`${apiBaseUrl}/trips${query ? `?${query}` : ''}`)
+    const response = await fetch(`${apiBaseUrl}/api/trips${query ? `?${query}` : ''}`)
 
     if (!response.ok) {
         await handleResponseError(response, 'Failed to load trips')
@@ -101,7 +101,7 @@ export const getTrips = async (
 }
 
 export const createTrip = async (payload: TripCreatePayload, apiBaseUrl: string) => {
-    const response = await fetch(`${apiBaseUrl}/trips`, {
+    const response = await fetch(`${apiBaseUrl}/api/trips`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -119,7 +119,7 @@ export const updateTrip = async (
     payload: TripUpdatePayload,
     apiBaseUrl: string,
 ) => {
-    const response = await fetch(`${apiBaseUrl}/trips/${tripId}`, {
+    const response = await fetch(`${apiBaseUrl}/api/trips/${tripId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -133,7 +133,7 @@ export const updateTrip = async (
 }
 
 export const deleteTrip = async (tripId: number, apiBaseUrl: string) => {
-    const response = await fetch(`${apiBaseUrl}/trips/${tripId}`, {
+    const response = await fetch(`${apiBaseUrl}/api/trips/${tripId}`, {
         method: 'DELETE',
     })
 

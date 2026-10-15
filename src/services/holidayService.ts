@@ -59,7 +59,7 @@ const handleResponseError = async (response: Response, fallbackMessage: string) 
 }
 
 export const getHolidays = async (apiBaseUrl: string): Promise<HolidayCollection> => {
-    const response = await fetch(`${apiBaseUrl}/holidays`)
+    const response = await fetch(`${apiBaseUrl}/api/holidays`)
     if (!response.ok) {
         throw new Error('Failed to load holidays')
     }
@@ -87,7 +87,7 @@ export const getHolidays = async (apiBaseUrl: string): Promise<HolidayCollection
 }
 
 export const saveHoliday = async (payload: HolidayRecord, apiBaseUrl: string) => {
-    const response = await fetch(`${apiBaseUrl}/holidays`, {
+    const response = await fetch(`${apiBaseUrl}/api/holidays`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -102,7 +102,7 @@ export const saveHoliday = async (payload: HolidayRecord, apiBaseUrl: string) =>
 
 export const deleteHoliday = async (date: string, name: string, apiBaseUrl: string) => {
     const params = new URLSearchParams({ date, name })
-    const response = await fetch(`${apiBaseUrl}/holidays?${params.toString()}`, {
+    const response = await fetch(`${apiBaseUrl}/api/holidays?${params.toString()}`, {
         method: 'DELETE',
     })
 
@@ -117,7 +117,7 @@ export const importHolidaysFromApi = async (
     holidays: HolidayImportRecord[],
     apiBaseUrl: string,
 ) => {
-    const response = await fetch(`${apiBaseUrl}/holidays/import`, {
+    const response = await fetch(`${apiBaseUrl}/api/holidays/import`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(holidays),
@@ -131,7 +131,7 @@ export const importHolidaysFromApi = async (
 }
 
 export const clearHolidays = async (apiBaseUrl: string) => {
-    const response = await fetch(`${apiBaseUrl}/clear-holidays`, { method: 'POST' })
+    const response = await fetch(`${apiBaseUrl}/api/clear-holidays`, { method: 'POST' })
     if (!response.ok) {
         await handleResponseError(response, 'Failed to clear holidays')
     }

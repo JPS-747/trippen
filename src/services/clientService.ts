@@ -95,7 +95,7 @@ export const importClientsFromApi = async (
     records: ClientImportRecord[],
     apiBaseUrl: string,
 ) => {
-    const response = await fetch(`${apiBaseUrl}/clients/import`, {
+    const response = await fetch(`${apiBaseUrl}/api/clients/import`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(records),
@@ -117,7 +117,7 @@ export const getClients = async (apiBaseUrl: string, page: number = 1, pageSize:
         sortBy,
         sortOrder,
     })
-    const response = await fetch(`${apiBaseUrl}/clients?${params}`)
+    const response = await fetch(`${apiBaseUrl}/api/clients?${params}`)
     if (!response.ok) {
         throw new Error('Failed to load clients')
     }
@@ -125,7 +125,7 @@ export const getClients = async (apiBaseUrl: string, page: number = 1, pageSize:
 }
 
 export const saveClient = async (payload: ClientUpsertPayload, apiBaseUrl: string) => {
-    const response = await fetch(`${apiBaseUrl}/clients`, {
+    const response = await fetch(`${apiBaseUrl}/api/clients`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -140,7 +140,7 @@ export const saveClient = async (payload: ClientUpsertPayload, apiBaseUrl: strin
 }
 
 export const deleteClient = async (clientName: string, apiBaseUrl: string) => {
-    const response = await fetch(`${apiBaseUrl}/clients/${encodeURIComponent(clientName)}`, {
+    const response = await fetch(`${apiBaseUrl}/api/clients/${encodeURIComponent(clientName)}`, {
         method: 'DELETE',
     })
     if (!response.ok) {
@@ -155,7 +155,7 @@ export const updateClientStatus = async (
     isDisabled: boolean,
     apiBaseUrl: string,
 ) => {
-    const response = await fetch(`${apiBaseUrl}/clients/${encodeURIComponent(clientName)}/status`, {
+    const response = await fetch(`${apiBaseUrl}/api/clients/${encodeURIComponent(clientName)}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isDisabled }),
@@ -170,7 +170,7 @@ export const updateClientStatus = async (
 }
 
 export const clearClients = async (apiBaseUrl: string) => {
-    const response = await fetch(`${apiBaseUrl}/clear-clients`, { method: 'POST' })
+    const response = await fetch(`${apiBaseUrl}/api/clear-clients`, { method: 'POST' })
     if (!response.ok) {
         const body = await response.json().catch(() => ({}))
         const detail = typeof body.detail === 'string' ? body.detail : 'Failed to clear clients'

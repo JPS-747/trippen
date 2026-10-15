@@ -49,7 +49,7 @@ const HolidaysPage = () => {
         // Export holidays as CSV using new endpoint
         const handleExportHolidays = async () => {
             try {
-                const response = await fetch(`${apiBaseUrl}/holidays/export`)
+                const response = await fetch(`${apiBaseUrl}/api/holidays/export`)
                 if (!response.ok) throw new Error('Failed to export holidays')
                 const blob = await response.blob()
                 const url = window.URL.createObjectURL(blob)

@@ -1,0 +1,9 @@
+# For environment variable support
+fastapi>=0.110.0
+uvicorn[standard]
+pydantic==2.11.7
+python-multipart==0.0.7
+websockets==11.0.3
+requests>=2.31.0
+sqlalchemy>=2.0.0
+psycopg[binary]>=3.1.18

@@ -27,7 +27,7 @@ const handleResponseError = async (response: Response, fallbackMessage: string) 
 }
 
 export const getVehicles = async (apiBaseUrl: string): Promise<VehicleRecord[]> => {
-    const response = await fetch(`${apiBaseUrl}/vehicles`)
+    const response = await fetch(`${apiBaseUrl}/api/vehicles`)
 
     if (!response.ok) {
         await handleResponseError(response, 'Failed to load vehicles')
@@ -37,7 +37,7 @@ export const getVehicles = async (apiBaseUrl: string): Promise<VehicleRecord[]> 
 }
 
 export const saveVehicle = async (payload: VehicleUpsertPayload, apiBaseUrl: string) => {
-    const response = await fetch(`${apiBaseUrl}/vehicles`, {
+    const response = await fetch(`${apiBaseUrl}/api/vehicles`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -52,7 +52,7 @@ export const saveVehicle = async (payload: VehicleUpsertPayload, apiBaseUrl: str
 }
 
 export const deleteVehicle = async (regNumber: string, apiBaseUrl: string) => {
-    const response = await fetch(`${apiBaseUrl}/vehicles/${encodeURIComponent(regNumber)}`, {
+    const response = await fetch(`${apiBaseUrl}/api/vehicles/${encodeURIComponent(regNumber)}`, {
         method: 'DELETE',
     })
     if (!response.ok) {
@@ -67,7 +67,7 @@ export const updateVehicleStatus = async (
     isDisabled: boolean,
     apiBaseUrl: string,
 ) => {
-    const response = await fetch(`${apiBaseUrl}/vehicles/${encodeURIComponent(regNumber)}/status`, {
+    const response = await fetch(`${apiBaseUrl}/api/vehicles/${encodeURIComponent(regNumber)}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isDisabled }),
