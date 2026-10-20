@@ -10,8 +10,8 @@ from fastapi import FastAPI, Depends, HTTPException, Query, WebSocket, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
-from . import helper
-from .database import get_db, init_db
+import helper
+from database import get_db, init_db
 
 helper.startup()
 

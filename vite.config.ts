@@ -23,8 +23,11 @@ export default defineConfig(({ mode }) => {
           // Explicitly points to your Python API on port 8000
           target: env.VITE_API_PROXY_TARGET ?? 'http://127.0.0.1:8000',
           changeOrigin: true,
+          secure: false,
         },
       },
     },
   }
 })
+
+

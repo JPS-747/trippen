@@ -773,8 +773,12 @@ def delete_trip_record(trip_id: int) -> bool:
     trip_distance = trip.get("totalDistanceKm", 0) if trip else 0
 
     for db in get_db():
-        result = db.execute("DELETE FROM trips WHERE id = ?", (trip_id,))
-        deleted = result.rowcount > 0
+        obj = db.query(Trip).filter(Trip.id == trip_id).first()
+        if not obj:
+            return False
+        db.delete(obj)
+        db.commit()
+
 
     # Update vehicle's odometer if the trip had a vehicle
     if deleted and vehicle_reg_number:
@@ -785,7 +789,7 @@ def delete_trip_record(trip_id: int) -> bool:
             new_odo = current_odo - trip_distance
             upsert_vehicle(vehicle_reg_number, current_odometer=new_odo)
 
-    return deleted
+    return True
 
 
 def cleanup_trips_data() -> list:
@@ -827,34 +831,68 @@ def clear_trips_data(start_date: str | None = None, end_date: str | None = None)
             )  # Ensure odometer doesn't go below 0
             upsert_vehicle(vehicle_reg, current_odometer=new_odo)
 
-    # Now delete the trips
-    for db in get_db():
-        if start_date or end_date:
-            q = db.query(Trip)
-            if start_date:
-                q = q.filter(Trip.date >= start_date)
-            if end_date:
-                q = q.filter(Trip.date <= end_date)
-            trip_count = q.delete(synchronize_session=False)
-            db.commit()
-            print(f"DEBUG: Deleted {trip_count} trips")
-        else:
-            print(f"DEBUG: Clearing all trips")
-            trip_count = db.query(Trip).delete(synchronize_session=False)
-            db.commit()
-    return trip_count
+
+    try:
+         # Bulk delete query
+        db.query(Trip).filter(Trip.id.in_([trip.id for trip in trips_to_delete])).delete(synchronize_session=False)
+
+        db.commit()
+        return  db.query(Trip).count()
+
+    except Exception as e:
+        db.rollback()
+        db.query(Trip).count()
 
 
 def clear_clients_data() -> list:
-    for db in get_db():
-        db.execute("DELETE FROM clients")
-    return []
+    
+# 1. Safely extract the session from the generator context
+    try:
+        db = next(get_db())
+    except StopIteration:
+        return []
+
+    try:
+        # 2. Check if any records exist before executing the wipe
+        count = db.query(Client).count()
+        if count == 0:
+            return []
+            
+        # 3. Perform an efficient bulk delete query
+        db.query(Client).delete(synchronize_session=False)
+        db.commit()
+        return []
+        
+    except Exception as e:
+        db.rollback()
+        print(f"Database purge failed: {e}")
+        return []
 
 
 def clear_holidays_data() -> list:
-    for db in get_db():
-        db.execute("DELETE FROM public_holidays")
-    return []
+    # 1. Safely extract the session from the generator context
+    try:
+        db = next(get_db())
+    except StopIteration:
+        return []
+
+    try:
+        # 2. Check if any records exist before executing the wipe
+        count = db.query(PublicHoliday).count()
+        if count == 0:
+            return []
+            
+        # 3. Perform an efficient bulk delete query
+        db.query(PublicHoliday).delete(synchronize_session=False)
+        db.commit()
+        return []
+        
+    except Exception as e:
+        db.rollback()
+        print(f"Database purge failed: {e}")
+        return []
+    
+
 
 
 # ---------------------------------------------------------------------------

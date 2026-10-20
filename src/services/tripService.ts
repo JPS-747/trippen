@@ -155,7 +155,7 @@ export const clearTrips = async (
     if (endDate) params.set('endDate', endDate)
 
     const query = params.toString()
-    const url = `${apiBaseUrl}/clear-trips${query ? `?${query}` : ''}`
+    const url = `${apiBaseUrl}/api/clear-trips${query ? `?${query}` : ''}`
 
     const response = await fetch(url, { method: 'POST' })
     if (!response.ok) {
